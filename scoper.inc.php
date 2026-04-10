@@ -92,5 +92,15 @@ return [
                 $contents,
             );
         },
+        // PHP-Scoper incorrectly prefixes string constants that look like
+        // namespace paths. The ISO8601 date format 'Ymd\THis\Z' gets mangled
+        // into 'Vendi\SesOffload\Vendor\Ymd\THis\Z' which breaks gmdate().
+        static function (string $filePath, string $prefix, string $contents): string {
+            return str_replace(
+                "'Vendi\\SesOffload\\Vendor\\Ymd\\THis\\Z'",
+                "'Ymd\\THis\\Z'",
+                $contents,
+            );
+        },
     ],
 ];
