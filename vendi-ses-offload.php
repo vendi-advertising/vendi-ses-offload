@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Vendi SES Offload
  * Description: Routes all WordPress email through Amazon SES using the SESv2 API.
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: Vendi Advertising
  * Requires PHP: 8.1
  */
