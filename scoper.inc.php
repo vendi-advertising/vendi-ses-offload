@@ -8,8 +8,8 @@ use Isolated\Symfony\Component\Finder\Finder;
 // Derived by tracing get_included_files() during SesV2Client instantiation.
 $awsSdkCoreDirs = [
     'Api', 'Auth', 'ClientSideMonitoring', 'Configuration', 'Credentials',
-    'DefaultsMode', 'Endpoint', 'EndpointDiscovery', 'EndpointV2', 'Handler',
-    'Identity', 'Retry', 'SesV2', 'Signature', 'Token',
+    'DefaultsMode', 'Endpoint', 'EndpointDiscovery', 'EndpointV2', 'Exception',
+    'Handler', 'Identity', 'Retry', 'SesV2', 'Signature', 'Token',
 ];
 
 // Build an exclude callback for unused AWS service and data directories.
@@ -78,5 +78,19 @@ return [
 
     'exclude-files' => [],
 
-    'patchers' => [],
+    'patchers' => [
+        // AwsClient::parseClass() dynamically builds exception class names as
+        // "Aws\\{$service}\\Exception\\{$service}Exception" — a string concat
+        // that PHP-Scoper can't rewrite. Patch it to use the scoped prefix.
+        static function (string $filePath, string $prefix, string $contents): string {
+            if (!str_ends_with($filePath, 'AwsClient.php')) {
+                return $contents;
+            }
+            return str_replace(
+                '"Aws\\\\{$service}\\\\Exception\\\\{$service}Exception"',
+                '"Vendi\\\\SesOffload\\\\Vendor\\\\Aws\\\\{$service}\\\\Exception\\\\{$service}Exception"',
+                $contents,
+            );
+        },
+    ],
 ];
