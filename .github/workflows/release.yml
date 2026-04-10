@@ -1,0 +1,46 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+
+      - name: Install Composer dependencies
+        run: composer install --no-dev --optimize-autoloader
+
+      - name: Install PHP-Scoper
+        run: composer global require humbug/php-scoper
+
+      - name: Run PHP-Scoper
+        run: php-scoper add-prefix --output-dir=build --force
+
+      - name: Regenerate autoloader for scoped build
+        run: composer dump-autoload --working-dir=build --classmap-authoritative --no-dev
+
+      - name: Create plugin zip
+        run: |
+          mkdir -p dist/vendi-ses-offload
+          cp vendi-ses-offload.php dist/vendi-ses-offload/
+          cp readme.txt dist/vendi-ses-offload/
+          cp -r src dist/vendi-ses-offload/
+          cp -r build/vendor dist/vendi-ses-offload/build/vendor
+          cd dist && zip -r ../vendi-ses-offload.zip vendi-ses-offload
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: vendi-ses-offload.zip
+          generate_release_notes: true
