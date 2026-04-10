@@ -1,0 +1,15 @@
+<?php
+
+namespace Vendi\SesOffload\Vendor\Aws\SageMakerMetrics;
+
+use Vendi\SesOffload\Vendor\Aws\AwsClient;
+/**
+ * This client is used to interact with the **Amazon SageMaker Metrics Service** service.
+ * @method \Aws\Result batchGetMetrics(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise batchGetMetricsAsync(array $args = [])
+ * @method \Aws\Result batchPutMetrics(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise batchPutMetricsAsync(array $args = [])
+ */
+class SageMakerMetricsClient extends AwsClient
+{
+}
