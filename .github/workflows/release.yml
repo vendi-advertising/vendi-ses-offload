@@ -32,11 +32,11 @@ jobs:
 
       - name: Create plugin zip
         run: |
-          mkdir -p dist/vendi-ses-offload
+          mkdir -p dist/vendi-ses-offload/build
           cp vendi-ses-offload.php dist/vendi-ses-offload/
           cp readme.txt dist/vendi-ses-offload/
           cp -r src dist/vendi-ses-offload/
-          cp -r build/vendor dist/vendi-ses-offload/build/vendor
+          cp -r build/vendor dist/vendi-ses-offload/build/
           cd dist && zip -r ../vendi-ses-offload.zip vendi-ses-offload
 
       - name: Create GitHub Release
