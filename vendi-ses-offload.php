@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Vendi SES Offload
  * Description: Routes all WordPress email through Amazon SES using the SESv2 API.
- * Version: 1.0.1
+ * Version: 1.0.5
  * Author: Vendi Advertising
  * Requires PHP: 8.1
  */
@@ -109,4 +109,9 @@ add_filter('pre_wp_mail', static function ($null, array $atts) use ($vendiSesMai
 
 if (is_admin()) {
     \Vendi\SesOffload\AdminPage::register();
+
+    add_filter('plugin_action_links_' . plugin_basename(__FILE__), static function (array $links): array {
+        array_unshift($links, '<a href="' . esc_url(admin_url('tools.php?page=vendi-ses')) . '">Settings</a>');
+        return $links;
+    });
 }

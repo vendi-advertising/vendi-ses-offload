@@ -4,7 +4,7 @@ Tags: email, ses, aws, smtp
 Requires at least: 5.9
 Tested up to: 6.7
 Requires PHP: 8.1
-Stable tag: 1.0.1
+Stable tag: 1.0.5
 License: GPLv2 or later
 
 Routes all WordPress email through Amazon SES using the SESv2 API.
@@ -62,7 +62,7 @@ Install php-scoper globally (`composer global require humbug/php-scoper`) and ru
 
 == Changelog ==
 
-= 1.0.1 =
+= 1.0.5 =
 * Initial release.
 * SES v2 API integration with raw MIME sending.
 * Email logging with sent/failed status tracking.
