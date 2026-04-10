@@ -16,13 +16,13 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.1'
+          php-version: '8.4'
 
       - name: Install Composer dependencies
         run: composer install --no-dev --optimize-autoloader
 
       - name: Install PHP-Scoper
-        run: composer global require humbug/php-scoper
+        run: composer global require humbug/php-scoper:^0.18.18
 
       - name: Run PHP-Scoper
         run: php-scoper add-prefix --output-dir=build --force

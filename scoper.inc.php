@@ -93,14 +93,25 @@ return [
             );
         },
         // PHP-Scoper incorrectly prefixes string constants that look like
-        // namespace paths. The ISO8601 date format 'Ymd\THis\Z' gets mangled
-        // into 'Vendi\SesOffload\Vendor\Ymd\THis\Z' which breaks gmdate().
+        // namespace paths. Date format strings with backslashes (e.g.
+        // 'Ymd\THis\Z') get mangled. Different scoper versions produce
+        // single or double backslashes, so we handle both.
         static function (string $filePath, string $prefix, string $contents): string {
-            return str_replace(
-                "'Vendi\\SesOffload\\Vendor\\Ymd\\THis\\Z'",
-                "'Ymd\\THis\\Z'",
-                $contents,
-            );
+            // Single-backslash variant (php-scoper 0.18.18+)
+            $mangled = [
+                "Vendi\\SesOffload\\Vendor\\Ymd\\THis\\Z"                 => "Ymd\\THis\\Z",
+                "Vendi\\SesOffload\\Vendor\\Y-m-d\\TH:i:s\\Z"            => "Y-m-d\\TH:i:s\\Z",
+                "Vendi\\SesOffload\\Vendor\\D, d M Y H:i:s \\G\\M\\T"    => "D, d M Y H:i:s \\G\\M\\T",
+            ];
+            $contents = str_replace(array_keys($mangled), array_values($mangled), $contents);
+
+            // Double-backslash variant (older php-scoper versions)
+            $mangledDouble = [
+                "Vendi\\\\SesOffload\\\\Vendor\\\\Ymd\\\\THis\\\\Z"              => "Ymd\\\\THis\\\\Z",
+                "Vendi\\\\SesOffload\\\\Vendor\\\\Y-m-d\\\\TH:i:s\\\\Z"         => "Y-m-d\\\\TH:i:s\\\\Z",
+                "Vendi\\\\SesOffload\\\\Vendor\\\\D, d M Y H:i:s \\\\G\\\\M\\\\T" => "D, d M Y H:i:s \\\\G\\\\M\\\\T",
+            ];
+            return str_replace(array_keys($mangledDouble), array_values($mangledDouble), $contents);
         },
     ],
 ];
